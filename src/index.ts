@@ -23,19 +23,21 @@ const menu: Pizza[] = [
 
 const orderQueue: Order[] = []
 
-function addNewPizza(pizzaObj: Pizza): void {
-	pizzaObj.id = nextPizzaId++
-    menu.push(pizzaObj)
-}
-
 /**
- * Challenge part 1.5: Try to move the logic for adding an ID to the pizza objects 
- * inside the addNewPizza function, so that we can call addNewPizza with no id, and
- * the function will handle that part for us.
- * 
- * NOTE: you will run into TS warnings that we'll address soon, but the code should
- * still run.
+ * Challenge:
+ * Fix the addNewPizza function using the Omit utility type. This might
+ * require more than just changing the "Pizza" typed `pizzaObj` parameter.
+ * Return the new pizza object (with the id added) from the function.
  */
+
+function addNewPizza(pizzaObj: Omit<Pizza, "id">): Pizza {
+	const newPizza: Pizza = {
+		id: nextPizzaId++,
+		...pizzaObj
+	}
+	menu.push(newPizza)
+	return newPizza
+}
 
 addNewPizza({ name: "Chicken Bacon Ranch", price: 12 })
 addNewPizza({ name: "BBQ Chicken", price: 12 })
@@ -87,33 +89,3 @@ export function getPizzaDetail(identifier: string | number): Pizza | undefined {
 console.log("Menu:", menu)
 // console.log("Cash in register:", cashInRegister)
 // console.log("Order queue:", orderQueue)
-
-type User = {
-    id: number
-    username: string
-    role: "member" | "contributor" | "admin"
-}
-
-const users: User[] = [
-    { id: 1, username: "john_doe", role: "member" },
-    { id: 2, username: "jane_smith", role: "contributor" },
-    { id: 3, username: "alice_jones", role: "admin" },
-    { id: 4, username: "charlie_brown", role: "member" },
-];
-
-function updateUser(id: number, updates: any) {
-    // Find the user in the array by the id
-    // Use Object.assign to update the found user in place. 
-    // Check MDN if you need help with using Object.assign
-	const findUser = users.find(item => item.id === id)
-	if (!findUser) {
-		return
-	}
-	return Object.assign(findUser, updates)
-}
-
-// Example updates:
-updateUser(1, { username: "new_john_doe" });
-updateUser(4, { role: "contributor" });
-
-console.log(users)

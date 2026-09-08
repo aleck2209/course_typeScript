@@ -1,15 +1,30 @@
-const menu = [
-    { id: 1, name: "Margherita", price: 8 },
-    { id: 2, name: "Pepperoni", price: 10 },
-    { id: 3, name: "Hawaiian", price: 10 },
-    { id: 4, name: "Veggie", price: 9 },
-];
 let cashInRegister = 100;
 let nextOrderId = 1;
+let nextPizzaId = 1;
+const menu = [
+    { id: nextPizzaId++, name: "Margherita", price: 8 },
+    { id: nextPizzaId++, name: "Pepperoni", price: 10 },
+    { id: nextPizzaId++, name: "Hawaiian", price: 10 },
+    { id: nextPizzaId++, name: "Veggie", price: 9 },
+];
 const orderQueue = [];
+/**
+ * Challenge:
+ * Fix the addNewPizza function using the Omit utility type. This might
+ * require more than just changing the "Pizza" typed `pizzaObj` parameter.
+ * Return the new pizza object (with the id added) from the function.
+ */
 function addNewPizza(pizzaObj) {
-    menu.push(pizzaObj);
+    const newPizza = {
+        id: nextPizzaId++,
+        ...pizzaObj
+    };
+    menu.push(newPizza);
+    return newPizza;
 }
+addNewPizza({ name: "Chicken Bacon Ranch", price: 12 });
+addNewPizza({ name: "BBQ Chicken", price: 12 });
+addNewPizza({ name: "Spicy Sausage", price: 11 });
 function placeOrder(pizzaName) {
     const selectedPizza = menu.find(pizzaObj => pizzaObj.name === pizzaName);
     if (!selectedPizza) {
@@ -30,20 +45,22 @@ function completeOrder(orderId) {
     order.status = "completed";
     return order;
 }
-const getPizzaDetail = (identifier) => {
-};
-addNewPizza({ id: 5, name: "Chicken Bacon Ranch", price: 12 });
-addNewPizza({ id: 6, name: "BBQ Chicken", price: 12 });
-addNewPizza({ id: 7, name: "Spicy Sausage", price: 11 });
-placeOrder("Chicken Bacon Ranch");
-placeOrder("Pepperoni");
-completeOrder(1);
-placeOrder("Anchovy");
-placeOrder("Veggie");
-completeOrder(2);
+export function getPizzaDetail(identifier) {
+    if (typeof identifier === "string") {
+        return menu.find(pizza => pizza.name.toLowerCase() === identifier.toLowerCase());
+    }
+    else if (typeof identifier === "number") {
+        return menu.find(pizza => pizza.id === identifier);
+    }
+    else {
+        throw new TypeError("Parameter `identifier` must be either a string or a number");
+    }
+}
+// placeOrder("Chicken Bacon Ranch")
+// placeOrder("Pepperoni")
+// completeOrder(1)
+// placeOrder("Veggie")
+// completeOrder(2)
 console.log("Menu:", menu);
-console.log("Cash in register:", cashInRegister);
-console.log("Order queue:", orderQueue);
-const demain = typeof (2) === 'string' ? true : false;
-console.log(demain);
-export {};
+// console.log("Cash in register:", cashInRegister)
+// console.log("Order queue:", orderQueue)
