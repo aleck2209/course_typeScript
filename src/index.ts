@@ -55,7 +55,7 @@ const getPizzaDetail = (identifier: string | number) => {
      * or a number, and use the menu.find() method accordingly
      */
 	if(typeof(identifier) === 'string') {
-		return menu.find(item => item.name === identifier)
+		return menu.find(item => item.name.toLowerCase() === identifier.toLowerCase())
 	}
 
 	if(typeof(identifier) === 'number') {
